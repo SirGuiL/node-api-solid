@@ -30,7 +30,7 @@ describe('Get User Profile use case', () => {
   })
 
   it('should not be able to authenticate with wrong email', async () => {
-    expect(() =>
+    await expect(() =>
       sut.execute({
         userId: 'not-existing-id',
       }),
