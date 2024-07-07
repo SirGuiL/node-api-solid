@@ -1,14 +1,21 @@
+import { randomUUID } from 'node:crypto'
+import { isSameDay } from 'date-fns'
+
 import { CheckIn, Prisma } from '@prisma/client'
 import { CheckInsRepository } from '../checkins-repository'
-import { randomUUID } from 'node:crypto'
 
 export class InMemoryCheckInsRepository implements CheckInsRepository {
   public checkIns: CheckIn[] = []
 
   async findByUserIdOnDay(userId: string, day: Date) {
-    const checkInOnSameDate = this.checkIns.find(
-      (checkIn) => checkIn.user_id === userId,
-    )
+    const checkInOnSameDate = this.checkIns.find((checkIn) => {
+      const isOnSameDate = isSameDay(
+        new Date(checkIn.created_at),
+        new Date(day),
+      )
+
+      return checkIn.user_id === userId && isOnSameDate
+    })
 
     if (!checkInOnSameDate) {
       return null
