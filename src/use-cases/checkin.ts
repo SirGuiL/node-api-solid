@@ -4,6 +4,8 @@ import { ResourceNotFoundError } from './errors/resource-not-found-error'
 import { CheckInsRepository } from '@/repositories/checkins-repository'
 import { GymsRepository } from '@/repositories/gyms-repository'
 import { DistanceUtils } from '@/utils/distanceUtils'
+import { MaxNumberOfCheckinsError } from './errors/max-number-of-checkins-error'
+import { MaxDistanceError } from './errors/max-distance-error'
 
 interface CheckInUseCaseRequest {
   userId: string
@@ -45,7 +47,7 @@ export class CheckInUseCase {
     const MAX_DISTANCE_IN_KILOMETERS = 0.1
 
     if (distance > MAX_DISTANCE_IN_KILOMETERS) {
-      throw new Error()
+      throw new MaxDistanceError()
     }
 
     const checkInOnSameDay = await this.checkInsRepository.findByUserIdOnDay(
@@ -54,7 +56,7 @@ export class CheckInUseCase {
     )
 
     if (checkInOnSameDay) {
-      throw new Error()
+      throw new MaxNumberOfCheckinsError()
     }
 
     const checkIn = await this.checkInsRepository.create({
