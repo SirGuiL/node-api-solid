@@ -15,6 +15,4 @@ if (_env.success === false) {
   throw new Error('Invalid environment variables')
 }
 
-console.log(_env.data.JWT_SECRET)
-
 export const env = _env.data
