@@ -7,6 +7,7 @@ import { verifyJWT } from '@/http/middlewares/verify-jwt'
 
 export const userRoutes = async (app: FastifyInstance) => {
   app.post('/users', register)
+
   app.post('/sessions', authenticate)
 
   // authenticated
